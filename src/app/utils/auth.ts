@@ -60,6 +60,7 @@ export async function validateSession(): Promise<SessionValidationResult> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session")?.value;
+    
     if (!token) {
       return { success: false, message: "No session cookie found" };
     }
@@ -67,15 +68,19 @@ export async function validateSession(): Promise<SessionValidationResult> {
     const sessionId = encodeHexLowerCase(
       sha256(new TextEncoder().encode(token))
     );
-    const session = await Session.findOne({ sessionToken: sessionId }).populate("userId");
-
+    
+    const session = await Session.findOne({ sessionToken: sessionId });
+    
     if (!session) {
       console.log("Session not found for user");
       await deleteCookieAction();
       return { success: false, message: "Invalid session" };
     }
-
-    const user = await User.findById(session.userId._id);
+    
+    
+    const user = await User.findById(session.userId);
+    
+    
     if (!user) {
       await handleSessionDeletion(sessionId);
       await deleteCookieAction();
@@ -146,3 +151,10 @@ export async function invalidateSessionByToken(
 //   await deleteCookieAction();
 //   console.log(`All sessions for user ${userId} invalidated`);
 // }
+
+
+
+
+
+
+

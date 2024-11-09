@@ -9,6 +9,7 @@ import { signupAction } from "@/app/(auth)/signup/actions";
 import { createSession } from "@/app/utils/auth";
 import { generateSessionToken } from "@/app/utils/auth";
 import { setSessionTokenCookie } from "@/app/utils/session";
+import { deleteCookieAction } from "@/app/actions/actions";
 
 export async function GET(request: NextRequest, response: NextResponse) {
   try {
@@ -56,10 +57,11 @@ export async function GET(request: NextRequest, response: NextResponse) {
 
     if (existingUser !== null) {
       if (!existingUser.isGoogleUser) {
-        return Response.json(
-          { error: "User already exists and is not a Google user" },
-          { status: 400 }
-        ); 
+        await deleteCookieAction();
+        return new Response(JSON.stringify({ error: "User already exists and is not a Google user" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
       }
       const sessionToken = await generateSessionToken();
       const session = await createSession(existingUser._id, sessionToken);
@@ -70,6 +72,7 @@ export async function GET(request: NextRequest, response: NextResponse) {
       name: username,
       email,
       isGoogleUser: true,
+      isEmailVerified:true
     });
     if (!createdUser.success) {
       return new Response(null, {

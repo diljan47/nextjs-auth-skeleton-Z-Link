@@ -6,6 +6,11 @@ export interface IUser {
   email: string;
   hashedPassword?: string;
   isGoogleUser?: boolean;
+  isAdmin?: boolean;
+  isEmailVerified?: boolean;
+  emailVerificationTOTP?: string;
+  passwordResetToken?: string;
+  passwordResetTokenExpiresAt?: Date;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -29,6 +34,23 @@ const userSchema = new mongoose.Schema<IUser>(
     isGoogleUser: {
       type: Boolean,
       default: false,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationTOTP: {
+      type: String,
+    },
+    passwordResetToken: {
+      type: String,
+    },
+    passwordResetTokenExpiresAt: {
+      type: Date,
     },
   },
   {

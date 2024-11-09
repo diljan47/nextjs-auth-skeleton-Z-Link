@@ -11,6 +11,8 @@ const page = () => {
     email: "",
     hashedPassword: "",
   });
+  const [error, setError] = useState<string | undefined>("");
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const resultData: SignInType = {
@@ -20,12 +22,13 @@ const page = () => {
 
     if (resultData.email && resultData.hashedPassword) {
       const response = await signInAction(resultData);
+      
       if (response.success && response.status === 200) {
-        router.push("/");
+        response.isEmailVerified ? router.push("/") : router.push("/verify-email");
       } else if (response.success === false && response.status === 404) {
         router.push("/signup");
-      } else if (response.success === false && response.status === 401) {
-        console.log(response.message);
+      } else if (response.success === false && (response.status === 401 || response.status === 409)) {
+        setError(response.message);
       } else {
         router.push("/signin");
       }
@@ -52,6 +55,8 @@ const page = () => {
           value={data.hashedPassword}
           onChange={(e) => setData({ ...data, hashedPassword: e.target.value })}
         />
+      {error && <div className="text-red-500">{error}</div>}
+      <Link className="text-xl text-end  p-4 hover:underline hover:text-blue-700" href="/forgot-password">Forgot Password</Link>
         <button className="bg-slate-500 mt-4 text-white p-4 rounded-md font-bold m-auto hover:bg-slate-700" type="submit">Sign In</button>
       <Link className="text-2xl mt-5 bg-slate-500 text-white p-2 rounded-md font-bold m-auto hover:underline" href="/signup">Sign Up</Link>
       </form>

@@ -4,11 +4,15 @@ import { LogoutButton } from "./components/LogoutButton";
 import { validateUserAction } from "./actions/actions";
 import ValidateUserComp from "./components/ValidateUserComp";
 import InvalidateComp from "./components/InvalidateComp";
+import { redirect } from "next/navigation";
 
 
 
 export default async function Home() {
   const session = await validateUserAction();
+  if(!session.success){
+    redirect("/signin");
+  }
   
 
   return (

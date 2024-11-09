@@ -1,12 +1,17 @@
 "use client";
+
 import React, { useState } from 'react'
 import { validateUserAction } from '../actions/actions';
 import { SessionValidationResult } from '../utils/auth';
+import { redirect } from 'next/navigation';
 
 const ValidateUserComp = () => {
   const [session, setSession] = useState<SessionValidationResult | null>(null);
   const handleValidate = async ()=>{
     const session = await validateUserAction();
+    if(!session.success){
+      redirect("/signin");
+    }
     setSession(session);
   }
   

@@ -1,4 +1,5 @@
-import { Google } from 'arctic'
+
+import { Google } from "arctic";
 
 export const googleOAuthClient = new Google(
     process.env.GOOGLE_CLIENT_ID!,
