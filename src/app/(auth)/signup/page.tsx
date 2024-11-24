@@ -1,75 +1,141 @@
 "use client";
 import React, { useState } from "react";
 import { signupAction } from "./actions";
-import { IUser } from "../../../../models/User";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import GoogleauthComp from "@/app/components/GoogleauthComp";
+import { toast, Toaster } from "sonner";
+import { Loader2 } from "lucide-react";
+import HeaderComp from "@/app/components/HeaderComp";
 
-const page = () => {
-  const [data, setData] = useState<IUser>({
-    name: "",
-    email: "",
-    hashedPassword: "",
+const SignUpSchema = z.object({
+  name: z.string().min(3),
+  email: z.string().email(),
+  hashedPassword: z.string().min(3),
+});
+
+type SignUpType = z.infer<typeof SignUpSchema>;
+
+const SignUpPage = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<SignUpType>({
+    resolver: zodResolver(SignUpSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      hashedPassword: "",
+    },
   });
-  const [error, setError] = useState<string | undefined>("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const resultData: IUser = {
-      name: e.currentTarget.username.value,
-      email: e.currentTarget.email.value,
-      hashedPassword: e.currentTarget.password.value,
-    };
+  const onSubmit = async (data: SignUpType) => {
+    try {
+      setIsLoading(true);
+      const response = await signupAction(data);
 
-    if (resultData.name && resultData.email && resultData.hashedPassword) {
-      const response = await signupAction(resultData);
-      
-      if(response.success && response.status === 200){
-        response.isEmailVerified ? redirect("/") : redirect("/verify-email");
+      if (response.success && response.status === 200) {
+        toast.success(response.message);
+        router.push(response.isEmailVerified ? "/dashboard" : "/verify-email");
       }
-      if (response.status === 409) {
-        console.log("email already exists in database");
-        redirect("/signin");
+      if (!response.success) {
+        toast.error(response.message);
       }
+    } catch (error) {
+      console.log(error);
+      toast.error("An Unexpected Error Occured, Please try again later");
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
-    <div className="flex flex-col m-auto items-center justify-center h-screen ">
-      <div className="text-2xl font-bold  flex-start mb-4" >Sign Up Page</div>
-
-      <form className="flex flex-col  items-center justify-center gap-4" onSubmit={handleSubmit}>
-        <label className="text-sm flex-start " htmlFor="username">Name</label>
-        <input
-          className="p-2 rounded-md bg-slate-200 active:border-slate-700"
-          type="text"
-          name="username"
-          value={data.name}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-        />
-        <label className="text-sm" htmlFor="email">Email</label>
-        <input
-          className="p-2 rounded-md bg-slate-200 active:border-slate-700"
-          type="email"
-          name="email"
-          value={data.email}
-          onChange={(e) => setData({ ...data, email: e.target.value })}
-        />
-        <label className="text-sm" htmlFor="password">Password</label>
-        <input
-          className="p-2 rounded-md bg-slate-200 active:border-slate-700"
-          type="password"
-          name="password"
-          value={data.hashedPassword}
-          onChange={(e) => setData({ ...data, hashedPassword: e.target.value })}
-        />
-        {error && <div className="text-red-500">{error}</div>}
-        <button className="bg-slate-500 mt-4 text-white p-4 rounded-md font-bold m-auto hover:bg-slate-700" type="submit">Signup</button>
-      <Link className=" bg-slate-500 p-2  rounded-md font-bold m-auto hover:underline" href="/signin">Sign In</Link>
-
-      </form>
-
-    </div>
+    <>
+    <HeaderComp />
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <div className="w-full max-w-md space-y-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="hashedPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Enter your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {isLoading ? (
+              <Button className="w-full" type="submit" disabled={isLoading}>
+                <Loader2 className="animate-spin" />
+                Signing up...
+              </Button>
+            ) : (
+              <Button className="w-full" type="submit">
+                Sign Up
+              </Button>
+            )}
+           
+          </form>
+        </Form>
+        <Button
+              onClick={() => router.push("/signin")}
+              variant="link"
+              className="w-full"
+            >
+              Already have an account? Sign In
+            </Button>
+            <GoogleauthComp />
+      </div>
+      <Toaster richColors position="bottom-center" duration={1500} />
+      </div>
+    </>
   );
 };
 
-export default page;
+export default SignUpPage;

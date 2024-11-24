@@ -1,23 +1,20 @@
 "use client";
 
-import {  invalidateSessionAction, } from "../actions/actions";
-import { getSessionToken } from "../utils/session";
+import { logOutAction } from "../actions/actions";
+import { useRouter } from "next/navigation";
 
-
-
-export  function LogoutButton() {
-const handleLogout = async ()=>{
-  const token = await getSessionToken();
-  if(token.success){
-    await invalidateSessionAction(token.token);
-  } 
-  // redirect("/signin");
-}
+export function LogoutButton({ className }: { className?: string }) {
+  const router = useRouter();
   
-  
+  const handleLogout = async () => {
+
+    await logOutAction();
+    router.push("/signin");
+  };
+
   return (
     <button
-      className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      className={className}
       onClick={handleLogout}
     >
       Logout

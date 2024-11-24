@@ -2,17 +2,22 @@
 
 import { validateUserAction } from "@/app/actions/actions";
 import { generateEmailVerificationOTP, resendEmailVerificationOTP, verifyEmailVerificationOTP } from "@/app/utils/email/tOtp";
-import User from "../../../../models/User";
+import User from "../../../models/User";
 import { redirect } from "next/navigation";
-import { sendEmailVerificationEmail } from "@/app/utils/email/emailVerification";
-
+import { z } from "zod";
 type VerifyEmailVerificationActionResponse = {
   success: boolean;
   message: string;
 };
 
+const VerifyEmailSchema = z.object({
+  otp: z.string().min(6),
+});
+
+type VerifyEmailType = z.infer<typeof VerifyEmailSchema>;
+
 export async function verifyEmailVerificationAction(
-  otp: string
+  data: VerifyEmailType
 ): Promise<VerifyEmailVerificationActionResponse> {
   try {
 
@@ -37,7 +42,7 @@ export async function verifyEmailVerificationAction(
     }
 
     
-    const isValid = await verifyEmailVerificationOTP(otp);
+    const isValid = await verifyEmailVerificationOTP(data.otp);
     
     if (!isValid) {
       return {

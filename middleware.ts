@@ -1,16 +1,49 @@
-import { dbConnect } from "@/app/lib/dbConnect";
 import { NextResponse } from "next/server";
 
 import type { NextRequest } from "next/server";
 
+const publicRoutes = [ "/signin", "/signup", "/forgot-password", "/reset-password","/verify-email"];
+
+const protectedRoutes = ["/dashboard", "/account","/change-password","/logout",];
+
 export async function middleware(request: NextRequest): Promise<NextResponse> {
+
+  const { pathname } = request.nextUrl;
+  const token = request.cookies.get("session")?.value ?? null;
+
+  if (request.nextUrl.searchParams.has("invalid_session")) {
+    if (!pathname.startsWith('/signin')) {
+      const response = NextResponse.redirect(new URL("/signin", request.url));
+      const cookiesList = request.cookies.getAll();
+      
+      cookiesList.forEach((cookie) => {
+        response.cookies.delete(cookie.name);
+      });
+      return response;
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname === "/" || pathname.startsWith("/verify-email")) {
+    return NextResponse.next();
+  }
+
+  if (publicRoutes.some(route => pathname.startsWith(route)) && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (protectedRoutes.some(route => pathname.startsWith(route))) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
+    return NextResponse.next();
+  }
   
+
+
   if (request.method === "GET") {
     const response = NextResponse.next();
-    const token =  request.cookies.get("session")?.value ?? null;
     if (token !== null) {
-      // Only extend cookie expiration on GET requests since we can be sure
-      // a new session wasn't set when handling the request.
       response.cookies.set("session", token, {
         path: "/",
         maxAge: 60 * 60 * 24 * 30,
@@ -42,5 +75,30 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       status: 403,
     });
   }
-  return NextResponse.next();
+  return NextResponse.next(); 
 }
+
+
+export const config = {
+  matcher: [
+    // Protected routes
+    '/dashboard/:path*',
+    '/account/:path*',
+    '/change-password/:path*',
+    '/logout',
+    '/settings/:path*',
+    '/profile/:path*',
+    '/security/:path*',
+
+    // Auth routes
+    '/signin',
+    
+    '/signup',
+    '/forgot-password',
+    '/reset-password',
+    '/verify-email',
+
+    // Exclude Next.js internals
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ]
+};

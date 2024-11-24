@@ -6,10 +6,11 @@ import {
   encodeHexLowerCase,
 } from "@oslojs/encoding";
 import mongoose from "mongoose";
-import Session, { ISession } from "../../../models/Session";
-import User from "../../../models/User";
+import Session, { ISession } from "../../models/Session";
+import User from "../../models/User";
 import { cookies } from "next/headers";
-import { deleteCookieAction } from "../actions/actions";
+import { deleteCookieAction, logOutAction } from "../actions/actions";
+import { getSessionToken } from "./session";
 export interface SessionValidationResult {
   success: boolean;
   userId?: string;
@@ -17,6 +18,8 @@ export interface SessionValidationResult {
   message?: string;
   name?: string;
   email?: string;
+  isGoogleUser?: boolean;
+  bio?: string;
 }
 
 export async function generateSessionToken(): Promise<string> {
@@ -56,6 +59,7 @@ async function handleSessionDeletion(sessionId: string): Promise<void> {
 
 }
 
+
 export async function validateSession(): Promise<SessionValidationResult> {
   try {
     const cookieStore = await cookies();
@@ -72,8 +76,6 @@ export async function validateSession(): Promise<SessionValidationResult> {
     const session = await Session.findOne({ sessionToken: sessionId });
     
     if (!session) {
-      console.log("Session not found for user");
-      await deleteCookieAction();
       return { success: false, message: "Invalid session" };
     }
     
@@ -82,14 +84,13 @@ export async function validateSession(): Promise<SessionValidationResult> {
     
     
     if (!user) {
-      await handleSessionDeletion(sessionId);
-      await deleteCookieAction();
+      console.log("User not found deleting session");
+      
       return { success: false, message: "User not found deleting session" };
     }
 
     if (Date.now() >= session.expiresAt.getTime()) {
       await handleSessionDeletion(sessionId);
-      await deleteCookieAction();
       return { success: false, message: "Session expired" };
     }
 
@@ -104,10 +105,11 @@ export async function validateSession(): Promise<SessionValidationResult> {
       sessionExpires: session.expiresAt,
       name: user.name,
       email: user.email,
+      isGoogleUser: user.isGoogleUser,
+      bio: user.bio,
     };
   } catch (error) {
     console.error("Session validation error:", error);
-    await deleteCookieAction();
     return {
       success: false,
       message: "Failed to validate session",
@@ -125,18 +127,15 @@ export async function invalidateSessionByToken(
 
     const result = await Session.deleteOne({ sessionToken: sessionId });
     if (result.deletedCount === 0) {
-      await deleteCookieAction();
       return {
         success: false,
         message: "Session not found",
       };
     }
-    await deleteCookieAction();
     console.log(`Session with token ${sessionToken} invalidated`);
     return { success: true, message: "Session invalidated" };
   } catch (error) {
     console.log("Failed to invalidate session:", error);
-    await deleteCookieAction();
     return {
       success: false,
       message: "Failed to invalidate session",

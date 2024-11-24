@@ -4,8 +4,9 @@ export interface IUser {
   _id?: mongoose.Schema.Types.ObjectId;
   name: string;
   email: string;
+  bio?: string;
   hashedPassword?: string;
-  isGoogleUser?: boolean;
+  isGoogleUser: boolean;
   isAdmin?: boolean;
   isEmailVerified?: boolean;
   emailVerificationTOTP?: string;
@@ -24,6 +25,10 @@ const userSchema = new mongoose.Schema<IUser>(
       required: true,
       unique: true,
       lowercase: true,
+    },
+    bio: {
+      type: String,
+      default: "",
     },
     hashedPassword: {
       type: String,
@@ -63,8 +68,8 @@ userSchema.index({ email: 1 });
 
 // Add index for session queries
 
+
 export const User =
   mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
-// Export models directly instead of as default object
 export default User;

@@ -20,7 +20,7 @@ export async function getSessionToken(): Promise<{success: boolean, message: str
   const cookiesData = await cookies();
   const token = cookiesData.get("session")?.value || "";
   if(!token){
-	revalidatePath("/");
+	// revalidatePath("/");
 	return {success: false, message: "No session token found", token: ""};
   }
   return {success: true, message: "Session token found", token: token};

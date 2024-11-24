@@ -3,11 +3,12 @@
 import { createSession, generateSessionToken } from "@/app/utils/auth";
 import { setSessionTokenCookie } from "@/app/utils/session";
 import mongoose from "mongoose";
-import User from "../../../../models/User";
-import { IUser } from "../../../../models/User";
+import User from "../../../models/User";
 import { generateEmailVerificationOTP } from "@/app/utils/email/tOtp";
 import { sendEmailVerificationEmail } from "@/app/utils/email/emailVerification";
 import emailVerificationTemplate from "@/app/utils/email/template";
+import { z } from "zod";
+import { hashPassword } from "@/app/utils/email/password";
 
 interface SignupResponse {
   success: boolean;
@@ -20,14 +21,40 @@ interface SignupResponse {
   isGoogleUser?: boolean;
 }
 
+interface SignUpGoogleResponse {
+  success: boolean;
+  userId?: mongoose.Schema.Types.ObjectId;
+  message?: string;
+}
+
+const SignUpSchema = z.object({
+  name: z.string().min(3),
+  email: z.string().email(),
+  hashedPassword: z.string().min(3),
+});
+
+type SignUpType = z.infer<typeof SignUpSchema>;
+
+const SignUpGoogleSchema = z.object({
+  name: z.string().min(3),
+  email: z.string().email(),
+  isGoogleUser: z.boolean(),
+  isEmailVerified: z.boolean(),
+});
+
+type SignUpGoogleType = z.infer<typeof SignUpGoogleSchema>;
+
 export const signupAction = async (
-  userData: IUser
+  userData: SignUpType
 ): Promise<SignupResponse> => {
   try {
-    if (!userData) {
-      return { success: false, message: "No user data provided" };
+    const validatedData = SignUpSchema.safeParse(userData);
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: "Invalid data",
+      };
     }
-
     const existingUser = await User.findOne({ email: userData.email });
     if (existingUser) {
       if (existingUser.isGoogleUser) {
@@ -47,39 +74,36 @@ export const signupAction = async (
       }
     }
     let newUser;
-    if(!userData.isGoogleUser){
-    //email verification
-    const emailVerificationOTP = await generateEmailVerificationOTP();
+    if (existingUser === null || existingUser.isEmailVerified === false) {
+      //email verification
+      const emailVerificationOTP = await generateEmailVerificationOTP();
 
-     newUser = await User.create({
-      ...userData,
-      emailVerificationTOTP: emailVerificationOTP,
-      
-    });
-  
-    
-    const emailSent = await sendEmailVerificationEmail(
-      newUser.email,
-      emailVerificationTemplate.otpVerification(emailVerificationOTP).subject,
-      emailVerificationTemplate.otpVerification(emailVerificationOTP).html
-      );
-    
-    
-    //
-    if (!emailSent || emailSent.error) {
-      await User.deleteOne({ _id: newUser._id });
-      return {
-        success: false,
-        status: 500,
-        message: "Failed to send verification email. Please try again.",
-      };
-    }
-  }
-    else{
       newUser = await User.create({
         ...userData,
-        isEmailVerified: true,
+        hashedPassword: await hashPassword(userData.hashedPassword),
+        emailVerificationTOTP: emailVerificationOTP,
+      });
 
+      const emailSent = await sendEmailVerificationEmail(
+        newUser.email,
+        emailVerificationTemplate.otpVerification(emailVerificationOTP).subject,
+        emailVerificationTemplate.otpVerification(emailVerificationOTP).html
+      );
+
+      //
+      if (!emailSent || emailSent.error) {
+        await User.deleteOne({ _id: newUser._id });
+        return {
+          success: false,
+          status: 500,
+          message: "Failed to send verification email. Please try again.",
+        };
+      }
+    } else {
+      newUser = await User.create({
+        ...userData,
+        hashedPassword: await hashPassword(userData.hashedPassword),
+        isEmailVerified: true,
       });
     }
 
@@ -89,12 +113,59 @@ export const signupAction = async (
 
     return {
       success: true,
+      message: "Signup successful",
       status: 200,
       name: newUser.name,
       email: newUser.email,
     };
   } catch (error) {
     console.error("Signup error:", error);
-    throw error;
+    return {
+      success: false,
+      message: "An Unexpected Error Occured, Please try again later",
+    };
+  }
+};
+
+export const signupGoogleAction = async (
+  userData: SignUpGoogleType
+): Promise<SignUpGoogleResponse> => {
+  try {
+    const validatedData = SignUpGoogleSchema.safeParse(userData);
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: "Invalid data",
+      };
+    }
+    const existingUser = await User.findOne({ email: userData.email });
+    if (existingUser && !existingUser.isGoogleUser) {
+      return {
+        success: false,
+        message:
+          "This email is already registered. please sign in with your password.",
+      };
+    }
+    const newUser = await User.create(userData);
+    if (!newUser) {
+      return {
+        success: false,
+        message: "Failed to create user",
+      };
+    }
+
+
+    return {
+      success: true,
+      message: "Signup successful",
+      userId: newUser._id.toString(),
+    };
+  } catch (error) {
+    console.error("Signup error:", error);
+    return {
+      
+      success: false,
+      message: "An Unexpected Error Occured, Please try again later",
+    };
   }
 };

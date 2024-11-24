@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { getGoogleOauthConsentUrl } from "../actions/google.auth";
+import { Button } from "@/components/ui/button";
 
 type GoogleAuthResult = {
   success: boolean;
@@ -21,14 +22,9 @@ const GoogleauthComp = () => {
     }
   };
   return (
-    <div>
-      <button
-        className="bg-blue-500 m-auto flex float-end text-white p-2 rounded-md"
-        onClick={handleGoogleAuth}
-      >
-        Sign in with Google
-      </button>
-    </div>
+    <Button type="button"  className="w-full bg-slate-200 text-black hover:bg-gray-300 no-underline hover:no-underline" onClick={handleGoogleAuth}>
+    Sign in with Google
+  </Button>
   );
 };
 

@@ -5,82 +5,96 @@ import { ResetPasswordCheckEmailActionResponse } from "../forgot-password/action
 import { resetPasswordTokenCheckAction } from "./actions";
 import { useRouter } from "next/navigation";
 
+import { z } from "zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast, Toaster } from "sonner";
+import { Loader2 } from "lucide-react";
+import HeaderComp from "@/app/components/HeaderComp";
+
+const changePasswordSchema = z.object({
+  password: z.string().min(1),
+});
+
+type ChangePasswordType = z.infer<typeof changePasswordSchema>;
+
 const page = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [response, setResponse] =
-    useState<ResetPasswordCheckEmailActionResponse>({
-      success: false,
-      message: "",
-    });
+
+
+  const formMethods = useForm<ChangePasswordType>({
+    resolver: zodResolver(changePasswordSchema),
+    defaultValues: {
+      password: "",
+    },
+  });
+
   useEffect(() => {
     if (!token || token === "") {
-      setResponse({ success: false, message: "Invalid token" });
+      toast.error("Invalid token");
       setTimeout(() => {
-        setResponse({ success: false, message: "Navigating to login page" });
         router.push("/signup");
-      }, 3000);
+      }, 1000);
     }
   }, [token, router]);
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (password === "" || confirmPassword === "") {
-      return setResponse({
-        success: false,
-        message: "Password cannot be empty",
-      });
+  const handleSubmit = async (data:ChangePasswordType) => {
+try{
+  setIsLoading(true);
+    const response = await resetPasswordTokenCheckAction(data, token);
+    if(!response.success){
+      toast.error(response.message);
+      return;
     }
-    if (password !== confirmPassword) {
-        return setResponse({
-          success: false,
-          message: "Passwords do not match",
-        });
-    }
-    const response = await resetPasswordTokenCheckAction(password, token);
-    setResponse(response);
     if (response.success) {
+      toast.success(response.message);
       setTimeout(() => {
         router.push("/signin");
-      }, 3000);
+      }, 1000);
     }
+  } catch (error) {
+    toast.error("An Unexpected Error Occurred, Please try again later");
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <h1 className="text-2xl font-bold">Reset Password</h1>
-      <p className="text-sm text-gray-500">
-        Please enter your new password below.
-      </p>
-      <form className="flex flex-col items-center justify-center gap-4">
-        <input
-          type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          placeholder="New Password"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <input
-          type="password"
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-          }}
-          placeholder="Confirm Password"
-          className="p-2 border border-gray-300 rounded-md"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded-md"
-          onClick={handleSubmit}
-        >
-          Reset Password
-        </button>
-        {response.message && <p className="text-red-500">{response.message}</p>}
-      </form>
+    <>
+    <HeaderComp />
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+    <div className="w-full max-w-md space-y-8">
+      <FormProvider {...formMethods}>
+        <form onSubmit={formMethods.handleSubmit(handleSubmit)} className="space-y-6">
+          <FormField
+            control={formMethods.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>New Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Enter your new password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Changing password...</Button> :
+              <Button className="w-full" type="submit" >
+                Change Password
+              </Button>
+            }
+        </form>
+      </FormProvider>
     </div>
+      <Toaster richColors position="bottom-center" duration={1500} />
+    </div>
+    </>
   );
 };
 

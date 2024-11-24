@@ -4,8 +4,8 @@ import { googleOAuthClient } from "@/app/utils/googleOauth";
 import { decodeIdToken, OAuth2Tokens } from "arctic";
 import { cookies } from "next/dist/server/request/cookies";
 import { NextRequest, NextResponse } from "next/server";
-import User, { IUser } from "../../../../../../models/User";
-import { signupAction } from "@/app/(auth)/signup/actions";
+import User from "../../../../../models/User";
+import { signupGoogleAction } from "@/app/(auth)/signup/actions";
 import { createSession } from "@/app/utils/auth";
 import { generateSessionToken } from "@/app/utils/auth";
 import { setSessionTokenCookie } from "@/app/utils/session";
@@ -54,35 +54,46 @@ export async function GET(request: NextRequest, response: NextResponse) {
     const email = parsedClaims.email;
 
     const existingUser = await User.findOne({ email });
-
-    if (existingUser !== null) {
+    if (existingUser) {
       if (!existingUser.isGoogleUser) {
-        await deleteCookieAction();
-        return new Response(JSON.stringify({ error: "User already exists and is not a Google user" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
+        // await deleteCookieAction();
+        return new Response(null, {
+          status: 302,
+          headers: { Location: "/signin?error=email_101" },
         });
       }
       const sessionToken = await generateSessionToken();
-      const session = await createSession(existingUser._id, sessionToken);
+      const session = await createSession(
+        existingUser._id.toString(),
+        sessionToken
+      );
       await setSessionTokenCookie(sessionToken, session.expiresAt);
       return new Response(null, { status: 302, headers: { Location: "/" } });
     }
-    const createdUser = await signupAction({
+
+    const createdUser = await signupGoogleAction({
       name: username,
       email,
       isGoogleUser: true,
-      isEmailVerified:true
+      isEmailVerified: true,
     });
-    if (!createdUser.success) {
-      return new Response(null, {
-        status: 302,
-        headers: { Location: "/signin" },
-      });
-    }
+    if(createdUser.success && createdUser.userId){
+    
+    const sessionToken = await generateSessionToken();
+    const session = await createSession(createdUser.userId, sessionToken);
+    await setSessionTokenCookie(sessionToken, session.expiresAt);
+
     return new Response(null, { status: 302, headers: { Location: "/" } });
+    }
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/signin?error=failed_400" },
+    });
   } catch (error) {
-    console.log(error);
-    return new Response(null, { status: 302, headers: { Location: "/signin" } });
+    await deleteCookieAction();
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/signin?error=failed_404" },
+    });
   }
 }
