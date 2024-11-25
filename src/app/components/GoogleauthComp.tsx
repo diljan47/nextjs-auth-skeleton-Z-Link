@@ -2,6 +2,7 @@
 import React from "react";
 import { getGoogleOauthConsentUrl } from "../actions/google.auth";
 import { Button } from "@/components/ui/button";
+import { FaGoogle } from "react-icons/fa";
 
 type GoogleAuthResult = {
   success: boolean;
@@ -23,8 +24,11 @@ const GoogleauthComp = () => {
   };
   return (
     <Button type="button"  className="w-full bg-slate-200 text-black hover:bg-gray-300 no-underline hover:no-underline" onClick={handleGoogleAuth}>
-    Sign in with Google
-  </Button>
+      <span className="flex items-center gap-1">
+        Sign in with Google
+        <FaGoogle className="w-4 h-4 ml-1 " />
+      </span>
+    </Button>
   );
 };
 

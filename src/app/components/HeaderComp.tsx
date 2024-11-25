@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { NavUser } from "./AccountPopComp";
 import { ModeToggle } from "@/components/ui/darkmode";
 
 export default function HeaderComp() {

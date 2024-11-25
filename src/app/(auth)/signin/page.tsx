@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import GoogleauthComp from "@/app/components/GoogleauthComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
+import { MdEmail } from "react-icons/md";
 
 const SignInSchema = z.object({
   email: z.string().email(),
@@ -113,7 +114,10 @@ const SignInPage = () => {
             />
             {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Signing in...</Button> :
               <Button className="w-full" type="submit" >
-                Sign In
+                <span className="flex items-center gap-1">
+                  Sign In
+                  <MdEmail className="w-5 h-5 text-white dark:text-black" />
+                </span>
               </Button>
             }
             <GoogleauthComp />

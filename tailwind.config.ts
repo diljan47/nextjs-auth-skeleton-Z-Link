@@ -27,6 +27,19 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			'infinite-scroll': 'infinite-scroll 25s linear infinite'
+  		},
+  		keyframes: {
+  			'infinite-scroll': {
+  				from: {
+  					transform: 'translateX(0)'
+  				},
+  				to: {
+  					transform: 'translateX(calc(-50% - 1rem))'
+  				}
+  			}
   		}
   	}
   },

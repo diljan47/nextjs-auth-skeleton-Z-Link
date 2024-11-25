@@ -1,31 +1,98 @@
-"use server";
-import Link from "next/link";
-import { validateUserAction } from "../actions/actions";
-import { NavUser } from "../components/AccountPopComp";
-import { Toaster } from "sonner";
-import { ModeToggle } from "@/components/ui/darkmode";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Overview } from "@/app/dashboard/components/overview"
+import { RecentActivity } from "@/app/dashboard/components/recent-activity"
+import { 
+  Users,
+  DollarSign,
+  ArrowUpRight,
+  ArrowDownRight,
+  UserPlus,
+  Building
+} from "lucide-react"
 
-export default async function Dashboard() {
-  const session = await validateUserAction();
- 
+export default function AdminDashboard() {
   return (
-    <div className=" flex  min-h-screen">
-      <header className="flex justify-between items-center p-6  fixed w-full z-40">
-        <Link href="/">
-          <h1
-            className="text-2xl md:text-3xl font-extrabold tracking-wide cursor-pointer bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-indigo-500 text-transparent bg-clip-text"
-        >
-          Zauth.
-          </h1>
-        </Link>
-        <div className="flex justify-between px-5 gap-2 cursor-pointer">
-          {session.success && (
-          <NavUser user={{ name: session.name, email: session.email }} />
-        )}
-        <ModeToggle  />
-        </div>
-      </header>
-      <Toaster richColors position="bottom-center" duration={1500} />
+    <div className="flex-1 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="hover:shadow-lg transition-all">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="flex items-center pt-1 text-xs text-green-500">
+              <ArrowUpRight className="h-4 w-4" />
+              +20.1% from last month
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+2350</div>
+            <div className="flex items-center pt-1 text-xs text-red-500">
+              <ArrowDownRight className="h-4 w-4" />
+              -4.5% from last week
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+            <UserPlus className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12,234</div>
+            <div className="flex items-center pt-1 text-xs text-green-500">
+              <ArrowUpRight className="h-4 w-4" />
+              +19% from last month
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+            <Building className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+573</div>
+            <div className="flex items-center pt-1 text-xs text-green-500">
+              <ArrowUpRight className="h-4 w-4" />
+              +201 since last quarter
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 hover:shadow-lg transition-all">
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="pl-2">
+            <Overview />
+          </CardContent>
+        </Card>
+        <Card className="col-span-3 hover:shadow-lg transition-all">
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RecentActivity />
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }

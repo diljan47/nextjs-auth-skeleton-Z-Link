@@ -6,6 +6,9 @@ import { ModeToggle } from "@/components/ui/darkmode";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import Link from "next/link";
 import { getSessionToken } from "./utils/session";
+import { GradualSpacing } from "@/components/ui/text-space-animation";
+import { TechStack } from "@/components/ui/tech-stack";
+import { FaGithub } from "react-icons/fa";
 
 export default async function Home() {
   const session = await getSessionToken();
@@ -49,11 +52,14 @@ export default async function Home() {
       <main className="flex-1 flex flex-col justify-center items-center text-center">
         <BackgroundLines>
           <div className="space-y-6 px-4">
-            <h1 className="bg-gradient-to-br from-slate-300 to-slate-600 py-4 bg-clip-text text-4xl md:text-7xl font-bold tracking-tight text-transparent">
-              Authentication Made Simple
-            </h1>
+            <GradualSpacing
+              text="Authentication Made Simple"
+              className="bg-gradient-to-r from-slate-500  to-slate-800 bg-clip-text text-transparent py-4 text-4xl md:text-7xl font-bold tracking-tight dark:bg-gradient-to-r dark:from-cyan-600 dark:via-purple-400 dark:to-pink-400"
+            />
             <p className="text-slate-800 max-w-2xl mx-auto text-sm md:text-lg dark:text-slate-200">
-              An open-source Next.js authentication template with email verification,
+              An open-source Next.js authentication template with email
+              verification, password reset, and Google OAuth. Perfect for your
+              next project.
               password reset, and Google OAuth. Perfect for your next project.
             </p>
             <div className="flex justify-center gap-4 pt-4">
@@ -64,11 +70,15 @@ export default async function Home() {
               >
                 {process.env.GITHUB_PERSONAL_LINK && (
                   <Link href={process.env.GITHUB_PERSONAL_LINK} target="_blank">
-                    GitHub
+                    <span className="flex items-center gap-1">
+                      GitHub
+                      <FaGithub className="w-5 h-5" />
+                    </span>
                   </Link>
                 )}
               </Button>
             </div>
+            <TechStack className="justify-center pt-8"/>
           </div>
         </BackgroundLines>
       </main>

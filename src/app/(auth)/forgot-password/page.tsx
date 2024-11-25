@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
+import { MdEmail } from "react-icons/md";
 const forgotPasswordSchema = z.object({
   email: z.string().email(),
 });
@@ -84,7 +85,10 @@ const ForgotPasswordPage = () => {
 
             {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Sending email...</Button> :
               <Button className="w-full" type="submit" >
-                Send Email Link
+                <span className="flex items-center gap-1">  
+                  Send Email Link
+                  <MdEmail className="w-5 h-5 text-white dark:text-black" />
+                </span>
               </Button>
             }
           </form>
