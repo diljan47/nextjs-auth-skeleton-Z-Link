@@ -1,6 +1,8 @@
 "use client";
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signInAction } from "./actions";
 import { z } from "zod";
 import { useForm } from "react-hook-form";

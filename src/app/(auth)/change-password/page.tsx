@@ -1,10 +1,11 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { resetPasswordProtectedPageAction } from "./actions";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast, Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
