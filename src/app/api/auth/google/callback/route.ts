@@ -3,7 +3,7 @@
 import { googleOAuthClient } from "@/app/utils/googleOauth";
 import { decodeIdToken, OAuth2Tokens } from "arctic";
 import { cookies } from "next/dist/server/request/cookies";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import User from "../../../../../models/User";
 import { signupGoogleAction } from "@/app/(auth)/signup/actions";
 import { createSession } from "@/app/utils/auth";
@@ -11,7 +11,7 @@ import { generateSessionToken } from "@/app/utils/auth";
 import { setSessionTokenCookie } from "@/app/utils/session";
 import { deleteCookieAction } from "@/app/actions/actions";
 
-export async function GET(request: NextRequest, response: NextResponse) {
+export async function GET(request: NextRequest) {
   console.log("Google callback route");
   try {
     const url = new URL(request.url);
