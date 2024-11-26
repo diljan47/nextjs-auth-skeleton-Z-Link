@@ -1,4 +1,5 @@
 "use server";
+
 import { Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import DashboardButton from "./components/DashboardBtn";
@@ -10,9 +11,9 @@ import { GradualSpacing } from "@/components/ui/text-space-animation";
 import { TechStack } from "@/components/ui/tech-stack";
 import { FaGithub } from "react-icons/fa";
 
-export const dynamic = 'force-dynamic';
 const github_link = process.env.GITHUB_PERSONAL_LINK
 
+export const dynamic = 'force-dynamic';
 export default async function Home() {
   const session = await getSessionToken();
   const isLoggedIn = session.success;
