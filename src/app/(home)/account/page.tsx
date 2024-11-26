@@ -1,3 +1,7 @@
+"use server";
+
+export const dynamic = 'force-dynamic';
+
 import { validateUserAction } from "@/app/actions/actions"
 import { Separator } from "@/components/ui/separator"
 import { Toaster } from "sonner";
