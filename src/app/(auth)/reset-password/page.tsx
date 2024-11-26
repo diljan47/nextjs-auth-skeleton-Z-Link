@@ -23,9 +23,9 @@ const changePasswordSchema = z.object({
 
 type ChangePasswordType = z.infer<typeof changePasswordSchema>;
 
-const page = () => {
-  const [isLoading, setIsLoading] = useState(false);
+const ResetPasswordPage = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
 
@@ -117,4 +117,4 @@ try{
   );
 };
 
-export default page;
+export default ResetPasswordPage;
