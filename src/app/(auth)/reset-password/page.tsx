@@ -1,7 +1,8 @@
+export const dynamic = 'force-dynamic';
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { ResetPasswordCheckEmailActionResponse } from "../forgot-password/actions";
 import { resetPasswordTokenCheckAction } from "./actions";
 import { useRouter } from "next/navigation";
 
