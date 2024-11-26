@@ -67,28 +67,45 @@ try{
   return (
     <>
     <HeaderComp />
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-    <div className="w-full max-w-md space-y-8">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+    <div className="w-full max-w-[380px] sm:max-w-md space-y-4 sm:space-y-6">
+      <div className="text-center space-y-2">
+        <h2 className="text-xl sm:text-2xl font-bold">Reset Password</h2>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          Enter your new password below
+        </p>
+      </div>
+      
       <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(handleSubmit)} className="space-y-6">
+        <form onSubmit={formMethods.handleSubmit(handleSubmit)} className="space-y-4 sm:space-y-6">
           <FormField
             control={formMethods.control}
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>New Password</FormLabel>
+                <FormLabel className="text-sm sm:text-base">New Password</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your new password" {...field} />
+                  <Input 
+                    type="password"
+                    className="text-sm sm:text-base"
+                    placeholder="Enter your new password" 
+                    {...field} 
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs sm:text-sm" />
               </FormItem>
             )}
           />
-          {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Changing password...</Button> :
-              <Button className="w-full" type="submit" >
-                Change Password
-              </Button>
-            }
+          
+          {isLoading ? (
+            <Button className="w-full text-sm sm:text-base" type="submit" disabled>
+              <Loader2 className="animate-spin mr-2 h-4 w-4" />Resetting...
+            </Button>
+          ) : (
+            <Button className="w-full text-sm sm:text-base" type="submit">
+              Reset Password
+            </Button>
+          )}
         </form>
       </FormProvider>
     </div>

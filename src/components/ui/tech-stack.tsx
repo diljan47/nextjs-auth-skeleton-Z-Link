@@ -15,18 +15,18 @@ import {
   SiJsonwebtokens,
   SiTailwindcss
 } from "react-icons/si"
-import { MdEmail, MdSecurity } from "react-icons/md"
+import { MdEmail } from "react-icons/md"
 import { BiSolidComponent } from "react-icons/bi"
 
 const features = [
-    {
-      name: "Next.js 15",
-      icon: <SiNextdotjs className="h-5 w-5 text-slate-700/70 dark:text-slate-200/70" />,
-    },
-    {
-      name: "MongoDB",
-      icon: <SiMongodb className="h-5 w-5 text-green-500/70" />,
-    },
+  {
+    name: "Next.js 15",
+    icon: <SiNextdotjs className="h-5 w-5 text-slate-700/70 dark:text-slate-200/70" />,
+  },
+  {
+    name: "MongoDB",
+    icon: <SiMongodb className="h-5 w-5 text-green-500/70" />,
+  },
   {
     name: "TOTP Authentication",
     icon: <FaFingerprint className="h-5 w-5 text-emerald-500/70" />,
@@ -69,24 +69,20 @@ const features = [
   }
 ]
 
-const scrollingFeatures = [...features, ...features, ...features]
-
 export function TechStack({ className }: { className?: string }) {
   return (
-    <div className={cn("w-full overflow-hidden", className)}>
-      <div className="relative">
-        <div className="flex animate-infinite-scroll">
-          {scrollingFeatures.map((feature, idx) => (
+    <div className={cn("relative w-full overflow-hidden", className)}>
+      <div className="flex w-full overflow-hidden">
+        <div className="flex animate-marquee gap-4 whitespace-nowrap">
+          {[...features, ...features].map((feature, idx) => (
             <div 
-              key={`${feature.name}-${idx}`}
-              className="flex items-center gap-3 text-lg whitespace-nowrap mx-2 px-6 py-4 rounded-2xl 
-              bg-slate-200/5 dark:bg-slate-800/5 backdrop-blur-[1px]
-              text-slate-600/90 dark:text-slate-300/90"
+              key={idx}
+              className="inline-flex items-center gap-3 rounded-2xl bg-slate-200/5 px-4 py-3 text-sm 
+                         text-slate-600/90 backdrop-blur-[1px] dark:bg-slate-800/5 dark:text-slate-300/90 
+                         md:text-lg"
             >
               {feature.icon}
-              <span className="font-medium">
-                {feature.name}
-              </span>
+              <span className="font-medium">{feature.name}</span>
             </div>
           ))}
         </div>

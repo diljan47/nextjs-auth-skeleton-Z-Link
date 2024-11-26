@@ -8,6 +8,14 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+  	screens: {
+  		'xs': '375px',
+  		'sm': '640px',
+  		'md': '768px',
+  		'lg': '1024px',
+  		'xl': '1280px',
+  		'2xl': '1536px',
+  	},
   	extend: {
   		colors: {
   			background: 'var(--background)',
@@ -29,16 +37,12 @@ const config: Config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		animation: {
-  			'infinite-scroll': 'infinite-scroll 25s linear infinite'
+  			'marquee': 'marquee 60s linear infinite',
   		},
   		keyframes: {
-  			'infinite-scroll': {
-  				from: {
-  					transform: 'translateX(0)'
-  				},
-  				to: {
-  					transform: 'translateX(calc(-50% - 1rem))'
-  				}
+  			'marquee': {
+  				'0%': { transform: 'translateX(0)' },
+  				'100%': { transform: 'translateX(-50%)' }
   			}
   		}
   	}

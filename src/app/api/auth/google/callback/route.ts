@@ -12,6 +12,7 @@ import { setSessionTokenCookie } from "@/app/utils/session";
 import { deleteCookieAction } from "@/app/actions/actions";
 
 export async function GET(request: NextRequest, response: NextResponse) {
+  console.log("Google callback route");
   try {
     const url = new URL(request.url);
     const code = url.searchParams.get("code");

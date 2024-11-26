@@ -63,19 +63,16 @@ const VerifyEmailPage = () => {
   return (
     <>
       <HeaderComp />
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-md space-y-8">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+        <div className="w-full max-w-[380px] sm:max-w-md space-y-4 sm:space-y-6">
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-2/3 space-y-6"
-            >
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 mx-auto space-y-4 sm:space-y-6">
               <FormField
                 control={form.control}
                 name="otp"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>One-Time Password</FormLabel>
+                    <FormLabel className="text-sm sm:text-base">One-Time Password</FormLabel>
                     <FormControl>
                       <InputOTP maxLength={6} {...field}>
                         <InputOTPGroup>
@@ -88,22 +85,21 @@ const VerifyEmailPage = () => {
                         </InputOTPGroup>
                       </InputOTP>
                     </FormControl>
-                    <FormDescription>
-                      Please enter the one-time password sent to your email
-                      address.
+                    <FormDescription className="text-xs sm:text-sm">
+                      Please enter the one-time password sent to your email address.
                     </FormDescription>
-                    <FormMessage />
+                    <FormMessage className="text-xs sm:text-sm" />
                   </FormItem>
                 )}
               />
 
               {isLoading ? (
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  <Loader2 className="animate-spin" />
+                <Button className="w-full text-sm sm:text-base" type="submit" disabled={isLoading}>
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
                   Verifying...
                 </Button>
               ) : (
-                <Button className="w-full" type="submit">
+                <Button className="w-full text-sm sm:text-base" type="submit">
                   Verify OTP
                 </Button>
               )}
@@ -111,7 +107,7 @@ const VerifyEmailPage = () => {
               <Button
                 onClick={() => router.push("/signin")}
                 variant="link"
-                className="w-full"
+                className="w-full text-sm sm:text-base"
               >
                 Back to Sign In
               </Button>

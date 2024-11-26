@@ -42,7 +42,7 @@ export async function createSession(
     const session: ISession = {
       userId,
       sessionToken: sessionId,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
     };
     const result = await Session.create(session);
 
@@ -94,8 +94,8 @@ export async function validateSession(): Promise<SessionValidationResult> {
       return { success: false, message: "Session expired" };
     }
 
-    if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-      session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+    if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 3) { // 3 days before expiration
+      session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7) ; // 7 days from now
       await session.save();
     }
 

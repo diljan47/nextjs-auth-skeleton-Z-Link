@@ -3,19 +3,21 @@
 import { Separator } from "@/components/ui/separator"
 import ProfileForm from "./profile-form"
 import { validateUserAction } from "@/app/actions/actions";
-import { redirect } from "next/navigation";
 import { Toaster } from "sonner";
 
 export default async function SettingsProfilePage() {
   const session = await validateUserAction();
   if (!session.success) {
-    redirect("/signin");
+    return {
+      success: false,
+      message: "User not authenticated",
+    };
   }
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 sm:px-6">
       <div>
-        <h3 className="text-lg font-medium">Profile</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className="text-lg sm:text-xl font-medium">Profile</h3>
+        <p className="text-sm sm:text-base text-muted-foreground">
           This is how others will see you on the site.
         </p>
       </div>

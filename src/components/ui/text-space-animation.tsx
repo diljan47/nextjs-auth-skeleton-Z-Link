@@ -10,6 +10,7 @@ interface GradualSpacingProps {
   delayMultiple?: number;
   framerProps?: Variants;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function GradualSpacing({
@@ -21,6 +22,7 @@ export function GradualSpacing({
     visible: { opacity: 1, x: 0 },
   },
   className,
+  style,
 }: GradualSpacingProps) {
   return (
     <div className="flex justify-center space-x-1">
@@ -34,6 +36,7 @@ export function GradualSpacing({
             variants={framerProps}
             transition={{ duration, delay: i * delayMultiple }}
             className={cn("drop-shadow-sm ", className)}
+            style={style}
           >
             {char === " " ? <span>&nbsp;</span> : char}
           </motion.h1>

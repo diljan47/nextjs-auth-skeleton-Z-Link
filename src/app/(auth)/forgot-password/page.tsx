@@ -64,38 +64,40 @@ const ForgotPasswordPage = () => {
 
   return (
     <>
-    <HeaderComp />
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-md space-y-8">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+      <HeaderComp />
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6">
+        <div className="w-full max-w-[380px] sm:max-w-md space-y-4 sm:space-y-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm sm:text-base">Email</FormLabel>
+                    <FormControl>
+                      <Input className="text-sm sm:text-base" placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage className="text-xs sm:text-sm" />
+                  </FormItem>
+                )}
+              />
+              {isLoading ? (
+                <Button className="w-full text-sm sm:text-base" type="submit" disabled={isLoading}>
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" />Sending email...
+                </Button>
+              ) : (
+                <Button className="w-full text-sm sm:text-base" type="submit">
+                  <span className="flex items-center gap-2">
+                    Send Email Link
+                    <MdEmail className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
+                  </span>
+                </Button>
               )}
-            />
-
-            {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Sending email...</Button> :
-              <Button className="w-full" type="submit" >
-                <span className="flex items-center gap-1">  
-                  Send Email Link
-                  <MdEmail className="w-5 h-5 text-white dark:text-black" />
-                </span>
-              </Button>
-            }
-          </form>
-        </Form>
-      </div>
-      <Toaster richColors position="bottom-center" duration={1500} />
-
+            </form>
+          </Form>
+        </div>
+        <Toaster richColors position="bottom-center" duration={1500} />
       </div>
     </>
   );
