@@ -1,5 +1,5 @@
 import { Sidebar } from "@/app/dashboard/components/sidebar";
-import { Header } from "@/app/dashboard/header";
+import { Header } from "@/app/dashboard/components/header";
 import { validateUserAction } from "../../actions/actions";
 
 export default async function AdminLayout({
