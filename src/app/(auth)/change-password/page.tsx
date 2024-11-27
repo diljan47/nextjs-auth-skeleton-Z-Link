@@ -1,6 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -18,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { BackButtonComp } from "@/app/components/BackButtonComp";
 import HeaderComp from "@/app/components/HeaderComp";
+
+export const dynamic = "force-dynamic";
 
 const changePasswordSchema = z.object({
   oldPassword: z.string().min(1),

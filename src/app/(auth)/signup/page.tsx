@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import React, { useState } from "react";
 import { signupAction } from "./actions";
 import { useRouter } from "next/navigation";
@@ -22,6 +20,8 @@ import GoogleauthComp from "@/app/components/GoogleauthComp";
 import { toast, Toaster } from "sonner";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
+
+export const dynamic = "force-dynamic";
 
 const SignUpSchema = z.object({
   name: z.string().min(3),
@@ -65,77 +65,76 @@ const SignUpPage = () => {
   };
   return (
     <>
-    <HeaderComp />
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-md space-y-4">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+      <HeaderComp />
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md space-y-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="hashedPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {isLoading ? (
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                  <Loader2 className="animate-spin" />
+                  Signing up...
+                </Button>
+              ) : (
+                <Button className="w-full" type="submit">
+                  Sign Up
+                </Button>
               )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="hashedPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {isLoading ? (
-              <Button className="w-full" type="submit" disabled={isLoading}>
-                <Loader2 className="animate-spin" />
-                Signing up...
-              </Button>
-            ) : (
-              <Button className="w-full" type="submit">
-                Sign Up
-              </Button>
-            )}
-           
-          </form>
-        </Form>
-        <Button
-              onClick={() => router.push("/signin")}
-              variant="link"
-              className="w-full"
-            >
-              Already have an account? Sign In
-            </Button>
-            <GoogleauthComp />
-      </div>
-      <Toaster richColors position="bottom-center" duration={1500} />
+            </form>
+          </Form>
+          <Button
+            onClick={() => router.push("/signin")}
+            variant="link"
+            className="w-full"
+          >
+            Already have an account? Sign In
+          </Button>
+          <GoogleauthComp />
+        </div>
+        <Toaster richColors position="bottom-center" duration={1500} />
       </div>
     </>
   );

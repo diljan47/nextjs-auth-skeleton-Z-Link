@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInAction } from "./actions";
@@ -23,6 +21,8 @@ import GoogleauthComp from "@/app/components/GoogleauthComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
 import { MdEmail } from "react-icons/md";
+
+export const dynamic = 'force-dynamic';
 
 const SignInSchema = z.object({
   email: z.string().email(),

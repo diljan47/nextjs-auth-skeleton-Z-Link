@@ -13,7 +13,6 @@ import { FaGithub } from "react-icons/fa";
 
 const github_link = process.env.GITHUB_PERSONAL_LINK
 
-export const dynamic = 'force-dynamic';
 export default async function Home() {
   const session = await getSessionToken();
   const isLoggedIn = session.success;

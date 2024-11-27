@@ -5,8 +5,6 @@ import ProfileForm from "./profile-form"
 import { validateUserAction } from "@/app/actions/actions";
 import { Toaster } from "sonner";
 
-export const dynamic = 'force-dynamic';
-
 export default async function SettingsProfilePage() {
   const session = await validateUserAction();
   if (!session.success) {

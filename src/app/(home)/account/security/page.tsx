@@ -5,10 +5,8 @@ import AccountForm from "./security-form"
 import { validateUserAction } from "@/app/actions/actions";
 import { Toaster } from "sonner";
 
-export const dynamic = 'force-dynamic';
-
 export default async function SettingsSecurityPage() {
-  const session =  await validateUserAction();
+  const session = await validateUserAction();
   if(!session.success){
     return {
       success: false,
