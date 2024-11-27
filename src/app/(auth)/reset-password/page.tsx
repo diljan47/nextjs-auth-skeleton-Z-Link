@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { resetPasswordTokenCheckAction } from "./actions";
-import { useRouter } from "next/navigation";
 
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -32,8 +31,7 @@ type ChangePasswordType = z.infer<typeof changePasswordSchema>;
 const ResetPasswordPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
+  const token = router.query.token;
 
   const formMethods = useForm<ChangePasswordType>({
     resolver: zodResolver(changePasswordSchema),
@@ -53,7 +51,10 @@ const ResetPasswordPage = () => {
   const handleSubmit = async (data: ChangePasswordType) => {
     try {
       setIsLoading(true);
-      const response = await resetPasswordTokenCheckAction(data, token);
+      const response = await resetPasswordTokenCheckAction(
+        data,
+        token as string
+      );
       if (!response.success) {
         toast.error(response.message);
         return;

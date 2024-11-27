@@ -17,6 +17,9 @@ export async function resetPasswordTokenCheckAction(
   token: string
 ): Promise<ResetPasswordCheckEmailActionResponse> {
   try {
+    if (!token) {
+      return { success: false, message: "Invalid token" };
+    }
     const userId = await verifyResetPasswordToken(token);
     if (!userId) {
       return { success: false, message: "Invalid or expired token" };

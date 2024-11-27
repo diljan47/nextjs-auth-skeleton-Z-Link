@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { signInAction } from "./actions";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ type SignInType = z.infer<typeof SignInSchema>;
 const SignInPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const searchParams = useSearchParams();
+  const query = router.query;
 
   const form = useForm<SignInType>({
     resolver: zodResolver(SignInSchema),
@@ -43,9 +43,10 @@ const SignInPage = () => {
       hashedPassword: "",
     },
   });
+
   useEffect(() => {
-    if (searchParams.has("error")) {
-      const error = searchParams.get("error")?.toString();
+    if (query.error) {
+      const error = query.error.toString();
       if (error === "email_101") {
         toast.error(
           "This email is already registered. please sign in with your password."
@@ -54,10 +55,10 @@ const SignInPage = () => {
         toast.error("Something went wrong, please try again later");
       }
     }
-    if (searchParams.has("invalid_session")) {
+    if (query.invalid_session) {
       toast.warning("Please sign in to continue");
     }
-  }, [searchParams]);
+  }, [query]);
 
   const onSubmit = async (data: SignInType) => {
     try {
@@ -72,7 +73,7 @@ const SignInPage = () => {
         toast.error(response.message);
       }
     } catch (error) {
-      toast.error("An Unexpected Error Occured, Please try again later");
+      toast.error("An Unexpected Error Occurred, Please try again later");
     } finally {
       setIsLoading(false);
     }
@@ -80,70 +81,73 @@ const SignInPage = () => {
 
   return (
     <>
-    <HeaderComp  />
-    <div className="flex flex-col  items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-md space-y-3">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+      <HeaderComp />
+      <div className="flex flex-col items-center justify-center min-h-screen p-4">
+        <div className="w-full max-w-md space-y-3">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="hashedPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {isLoading ? (
+                <Button className="w-full" type="submit" disabled={isLoading}>
+                  <Loader2 className="animate-spin" />Signing in...
+                </Button>
+              ) : (
+                <Button className="w-full" type="submit">
+                  <span className="flex items-center gap-1">
+                    Sign In
+                    <MdEmail className="w-5 h-5 text-white dark:text-black" />
+                  </span>
+                </Button>
               )}
-            />
-            <FormField
-              control={form.control}
-              name="hashedPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {isLoading ? <Button className="w-full" type="submit" disabled={isLoading}><Loader2 className="animate-spin" />Signing in...</Button> :
-              <Button className="w-full" type="submit" >
-                <span className="flex items-center gap-1">
-                  Sign In
-                  <MdEmail className="w-5 h-5 text-white dark:text-black" />
-                </span>
-              </Button>
-            }
-            <GoogleauthComp />
-           
-          </form>
-        </Form>
-        <Button
-              onClick={() => router.push("/signup")}
-              variant="link"
-              className="w-full"
-            >
-              Don't have an account? Sign Up
-            </Button>
-            <Button
-              onClick={() => router.push("/forgot-password")}
-              variant="link"
-        className="w-full"
-        >
-        Forgot Password?
-      </Button>
+              <GoogleauthComp />
+            </form>
+          </Form>
+          <Button
+            onClick={() => router.push("/signup")}
+            variant="link"
+            className="w-full"
+          >
+            Don't have an account? Sign Up
+          </Button>
+          <Button
+            onClick={() => router.push("/forgot-password")}
+            variant="link"
+            className="w-full"
+          >
+            Forgot Password?
+          </Button>
+        </div>
+        <Toaster richColors position="bottom-center" duration={1500} />
       </div>
-      <Toaster richColors position="bottom-center" duration={1500} />
-    </div>
     </>
   );
 };
