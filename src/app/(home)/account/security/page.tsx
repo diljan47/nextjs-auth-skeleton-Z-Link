@@ -1,12 +1,24 @@
-"use server";
 
 import { Separator } from "@/components/ui/separator"
 import AccountForm from "./security-form"
 import { validateUserAction } from "@/app/actions/actions";
 import { Toaster } from "sonner";
 
-export default async function SettingsSecurityPage() {
+export const dynamic = "force-dynamic";
+
+async function getSecurityData() {
   const session = await validateUserAction();
+  if (!session.success) {
+    return {
+      success: false,
+      message: "Session expired",
+    };
+  }
+  return session
+}
+
+export default async function SettingsSecurityPage() {
+  const session = await getSecurityData();
   if(!session.success){
     return {
       success: false,

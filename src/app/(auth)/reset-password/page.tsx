@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { resetPasswordTokenCheckAction } from "./actions";
 
 import { z } from "zod";
@@ -20,7 +20,6 @@ import { toast, Toaster } from "sonner";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
 
-export const dynamic = "force-dynamic";
 
 const changePasswordSchema = z.object({
   password: z.string().min(1),
@@ -28,10 +27,24 @@ const changePasswordSchema = z.object({
 
 type ChangePasswordType = z.infer<typeof changePasswordSchema>;
 
+export const dynamic = "force-dynamic";
+
+
 const ResetPasswordPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const token = router.query.token;
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get('token');
+    if (!tokenParam) {
+      toast.error('Invalid token');
+      router.push('/signup');
+    } else {
+      setToken(tokenParam);
+    }
+  }, [router]);
 
   const formMethods = useForm<ChangePasswordType>({
     resolver: zodResolver(changePasswordSchema),
@@ -40,31 +53,21 @@ const ResetPasswordPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (!token || token === "") {
-      toast.error("Invalid token");
-      setTimeout(() => {
-        router.push("/signup");
-      }, 1000);
-    }
-  }, [token, router]);
   const handleSubmit = async (data: ChangePasswordType) => {
     try {
       setIsLoading(true);
-      const response = await resetPasswordTokenCheckAction(
-        data,
-        token as string
-      );
+      if (!token) {
+        toast.error('Invalid token');
+        router.push('/signup');
+        return;
+      }
+      const response = await resetPasswordTokenCheckAction(data, token);
       if (!response.success) {
         toast.error(response.message);
         return;
       }
-      if (response.success) {
-        toast.success(response.message);
-        setTimeout(() => {
-          router.push("/signin");
-        }, 1000);
-      }
+      toast.success(response.message);
+      router.push('/signin');
     } catch (error) {
       toast.error("An Unexpected Error Occurred, Please try again later");
     } finally {

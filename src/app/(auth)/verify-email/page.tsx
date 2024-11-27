@@ -26,6 +26,9 @@ import OtpResendComp from "@/app/components/OtpResendComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
 
+export const dynamic = 'force-dynamic';
+
+
 const VerifyEmailSchema = z.object({
   otp: z.string().min(6),
 });

@@ -1,11 +1,11 @@
-"use server";
-
-import { Separator } from "@/components/ui/separator"
-import ProfileForm from "./profile-form"
+import { Separator } from "@/components/ui/separator";
+import ProfileForm from "./profile-form";
 import { validateUserAction } from "@/app/actions/actions";
 import { Toaster } from "sonner";
 
-export default async function SettingsProfilePage() {
+export const dynamic = "force-dynamic";
+
+async function getProfileData() {
   const session = await validateUserAction();
   if (!session.success) {
     return {
@@ -13,6 +13,11 @@ export default async function SettingsProfilePage() {
       message: "User not authenticated",
     };
   }
+  return session;
+}
+
+export default async function SettingsProfilePage() {
+  const session = await getProfileData();
   return (
     <div className="space-y-6 px-4 sm:px-6">
       <div>
@@ -22,8 +27,12 @@ export default async function SettingsProfilePage() {
         </p>
       </div>
       <Separator />
-      <ProfileForm email={session.email} name={session.name} bio={session.bio} />
+      <ProfileForm
+        email={session.email}
+        name={session.name}
+        bio={session.bio}
+      />
       <Toaster richColors position="bottom-center" duration={1500} />
     </div>
-  )
+  );
 }

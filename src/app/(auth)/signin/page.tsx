@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { signInAction } from "./actions";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -21,6 +20,7 @@ import GoogleauthComp from "@/app/components/GoogleauthComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";
 import { MdEmail } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +34,6 @@ type SignInType = z.infer<typeof SignInSchema>;
 const SignInPage = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const query = router.query;
 
   const form = useForm<SignInType>({
     resolver: zodResolver(SignInSchema),
@@ -45,8 +44,12 @@ const SignInPage = () => {
   });
 
   useEffect(() => {
-    if (query.error) {
-      const error = query.error.toString();
+    // Get query parameters from URL
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get('error');
+    const invalid_session = params.get('invalid_session');
+
+    if (error) {
       if (error === "email_101") {
         toast.error(
           "This email is already registered. please sign in with your password."
@@ -55,10 +58,10 @@ const SignInPage = () => {
         toast.error("Something went wrong, please try again later");
       }
     }
-    if (query.invalid_session) {
+    if (invalid_session) {
       toast.warning("Please sign in to continue");
     }
-  }, [query]);
+  }, []);
 
   const onSubmit = async (data: SignInType) => {
     try {

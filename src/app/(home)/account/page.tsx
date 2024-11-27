@@ -1,8 +1,8 @@
-"use server";
-
 import { validateUserAction } from "@/app/actions/actions"
 import { Separator } from "@/components/ui/separator"
 import { Toaster } from "sonner";
+
+export const dynamic = "force-dynamic";
 
 export default async function SettingsProfilePage() {
   const session = await validateUserAction(); 
