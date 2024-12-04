@@ -1,5 +1,5 @@
 import { LogoutButton } from "@/app/components/LogoutButton";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import Link from "next/link";
 export default function AccountForm({
   isGoogleUser,

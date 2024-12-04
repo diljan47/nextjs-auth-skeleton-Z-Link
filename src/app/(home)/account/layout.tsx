@@ -1,9 +1,9 @@
 import { Metadata } from "next";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/app/components/ui/separator";
 import { SidebarComp } from "./sidebarComp";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/app/components/ui/avatar";
 import Link from "next/link";
-import { ModeToggle } from "@/components/ui/darkmode";
+import { ModeToggle } from "@/app/components/ui/darkmode";
 import { BackButtonComp } from "@/app/components/BackButtonComp";
 
 export const metadata: Metadata = {

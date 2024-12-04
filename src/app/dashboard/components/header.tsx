@@ -1,7 +1,7 @@
-import { ModeToggle } from "@/components/ui/darkmode";
+import { ModeToggle } from "@/app/components/ui/darkmode";
 import { NavUser } from "../../components/AccountPopComp";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/app/components/ui/separator";
 export function Header({ user }: { user: { name: string; email: string } }) {
   return (
     <div className="fixed top-0 left-0 right-0 supports-backdrop-blur:bg-background/60  bg-background/95 backdrop-blur z-20">

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/app/components/ui/card"
 import { Overview } from "@/app/dashboard/components/overview"
 import { RecentActivity } from "@/app/dashboard/components/recent-activity"
 import { 

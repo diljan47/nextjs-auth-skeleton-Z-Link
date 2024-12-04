@@ -6,15 +6,15 @@ import { resetPasswordTokenCheckAction } from "./actions";
 
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/app/components/ui/form";
+import { Input } from "@/app/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast, Toaster } from "sonner";
 import { Loader2 } from "lucide-react";

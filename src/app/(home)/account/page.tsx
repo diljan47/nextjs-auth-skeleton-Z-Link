@@ -1,5 +1,5 @@
 import { validateUserAction } from "@/app/actions/actions"
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/app/components/ui/separator"
 import { Toaster } from "sonner";
 
 export const dynamic = "force-dynamic";

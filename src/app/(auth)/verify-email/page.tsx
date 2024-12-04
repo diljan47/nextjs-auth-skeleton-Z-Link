@@ -15,13 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
+} from "@/app/components/ui/form";
+import { Button } from "@/app/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
+} from "@/app/components/ui/input-otp";
 import OtpResendComp from "@/app/components/OtpResendComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";

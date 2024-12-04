@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { resendEmailVerificationOTPAction } from "../(auth)/verify-email/actions";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { toast } from "sonner";
 import { Loader, Loader2 } from "lucide-react";
 

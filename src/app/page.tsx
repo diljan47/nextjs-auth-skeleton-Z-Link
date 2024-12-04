@@ -1,12 +1,12 @@
 import { Toaster } from "sonner";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import DashboardButton from "./components/DashboardBtn";
-import { ModeToggle } from "@/components/ui/darkmode";
-import { BackgroundLines } from "@/components/ui/background-lines";
+import { ModeToggle } from "@/app/components/ui/darkmode";
+import { BackgroundLines } from "@/app/components/ui/background-lines";
 import Link from "next/link";
 import { getSessionToken } from "./utils/session";
-import { GradualSpacing } from "@/components/ui/text-space-animation";
-import { TechStack } from "@/components/ui/tech-stack";
+import { GradualSpacing } from "@/app/components/ui/text-space-animation";
+import { TechStack } from "@/app/components/ui/tech-stack";
 import { FaGithub } from "react-icons/fa";
 
 const github_link = process.env.GITHUB_PERSONAL_LINK

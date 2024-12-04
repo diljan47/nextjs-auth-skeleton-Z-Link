@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from "@/app/components/ui/form";
+import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
 import GoogleauthComp from "@/app/components/GoogleauthComp";
 import { Loader2 } from "lucide-react";
 import HeaderComp from "@/app/components/HeaderComp";

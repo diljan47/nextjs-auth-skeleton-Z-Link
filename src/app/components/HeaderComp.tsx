@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ModeToggle } from "@/components/ui/darkmode";
+import { ModeToggle } from "@/app/components/ui/darkmode";
 
 export default function HeaderComp() {
   return (

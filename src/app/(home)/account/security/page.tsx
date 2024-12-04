@@ -1,5 +1,5 @@
 
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@/app/components/ui/separator"
 import AccountForm from "./security-form"
 import { validateUserAction } from "@/app/actions/actions";
 import { Toaster } from "sonner";

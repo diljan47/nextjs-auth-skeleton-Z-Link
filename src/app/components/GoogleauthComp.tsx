@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { getGoogleOauthConsentUrl } from "../actions/google.auth";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/ui/button";
 import { FaGoogle } from "react-icons/fa";
 
 type GoogleAuthResult = {
