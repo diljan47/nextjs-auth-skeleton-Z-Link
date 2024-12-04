@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Z-Auth: Next.js Authentication Template
 
-## Getting Started
+A modern, secure authentication system built with Next.js 15, featuring email verification, password reset, and Google OAuth integration.
 
-First, run the development server:
+## 🚀 Overview
+
+Z-Auth is a comprehensive authentication template that provides a robust foundation for your Next.js projects. Built with security and developer experience in mind, it combines modern authentication methods with an elegant UI.
+
+
+## 🚀 Features
+
+- 🔐 TOTP Authentication
+- ✉️ Email Verification
+- 🔑 Session-based Authentication 
+- 🔄 Password Reset Functionality
+- 🌐 Google OAuth Integration
+- 🎨 Shadcn UI Components
+- 🌙 Dark Mode Support
+- 🍪 Secure Session Cookies
+- 🎨 Tailwind CSS 
+- 📊 MongoDB Integration
+- ⚡ Next.js 15 App Router
+
+
+
+## 🚦 Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/z-auth.git
+cd z-auth
+
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up your environment variables:
+Create a `.env.local` file with the following variables:
+
+```env
+MONGODB_URI=
+NODE_ENV=development | production
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_RESPONSE_VERIFICATION_URL=
+RESEND_API_KEY=
+JWT_RESET_PASSWORD_SECRET=
+EMAIL_VERIFICATION_TOTP_SECRET=
+NEXT_PUBLIC_URL= http://localhost:3000
+GITHUB_PERSONAL_LINK=
+```
+
+4. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📝 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/src/app` - App router pages and layouts
+- `/src/components` - Reusable UI components
+- `/src/lib` - Utility functions and database connection
+- `/src/hooks` - Custom React hooks
 
-## Learn More
+## 🚀 Deployment
 
-To learn more about Next.js, take a look at the following resources:
+This project can be deployed on any platform that supports Next.js applications. We recommend:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Netlify](https://netlify.com)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
