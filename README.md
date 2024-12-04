@@ -1,10 +1,10 @@
-# Z-Auth: Next.js Authentication Template
+# Z-Link-Auth: Next.js Authentication Template
 
 A modern, secure authentication system built with Next.js 15, featuring email verification, password reset, and Google OAuth integration.
 
 ## 🚀 Overview
 
-Z-Auth is a comprehensive authentication template that provides a robust foundation for your Next.js projects. Built with security and developer experience in mind, it combines modern authentication methods with an elegant UI.
+Z-Link-Auth is a comprehensive authentication template that provides a robust foundation for your Next.js projects. Built with security and developer experience in mind, it combines modern authentication methods with an elegant UI.
 
 
 ## 🚀 Features

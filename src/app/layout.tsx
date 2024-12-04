@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Z-auth | Simple and secure authentication system",
-  description: "Z-auth is a simple and secure authentication system for your next project",
+  title: "Z-Link-Auth | Simple and secure authentication system",
+  description: "Z-Link-Auth is a simple and secure authentication system for your next project",
   icons: {
     icon: "/favicon.svg", 
   },
