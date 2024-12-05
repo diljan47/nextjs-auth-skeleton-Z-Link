@@ -8,7 +8,6 @@ import { generateEmailVerificationOTP } from "@/app/utils/email/tOtp";
 import { sendEmailVerificationEmail } from "@/app/utils/email/emailVerification";
 import emailVerificationTemplate from "@/app/utils/email/template";
 import { z } from "zod";
-import argon2 from "argon2";
 import { verifyPasswordHash } from "@/app/utils/email/password";
 const SignInSchema = z.object({
   email: z.string().email(),
