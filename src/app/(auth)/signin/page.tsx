@@ -132,6 +132,7 @@ const SignInPage = () => {
                 </Button>
               )}
               <GoogleauthComp />
+            
             </form>
           </Form>
           <Button
@@ -148,6 +149,40 @@ const SignInPage = () => {
           >
             Forgot Password?
           </Button>
+        </div>
+        <div className="text-sm text-muted-foreground mt-3 space-y-2 p-4 bg-yellow-50/80 dark:bg-yellow-900/10 rounded-lg">
+                <p className="text-center">
+                  <span className="text-red-500 ">*</span>
+                  For demo purposes, you can use temporary email services like:
+                </p>
+                <div className="flex flex-wrap justify-center gap-2 text-xs">
+                  <a 
+                    href="https://temp-mail.org" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    temp-mail.org
+                  </a>
+                  <span>•</span>
+                  <a 
+                    href="https://10minutemail.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    10minutemail.com
+                  </a>
+                  <span>•</span>
+                  <a 
+                    href="https://tempmail.plus" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    tempmail.plus
+                  </a>
+          </div>
         </div>
         <Toaster richColors position="bottom-center" duration={1500} />
       </div>
