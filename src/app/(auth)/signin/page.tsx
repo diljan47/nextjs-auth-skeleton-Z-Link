@@ -165,15 +165,7 @@ const SignInPage = () => {
                     temp-mail.org
                   </a>
                   <span>•</span>
-                  <a 
-                    href="https://10minutemail.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline"
-                  >
-                    10minutemail.com
-                  </a>
-                  <span>•</span>
+              
                   <a 
                     href="https://tempmail.plus" 
                     target="_blank" 
